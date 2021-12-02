@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+/* ----------------------------------------------------------
+  Default style
+---------------------------------------------------------- */
+
+body {
+    box-sizing: border-box;
+    margin: auto;
+    padding: 0 1em 1em;
+    max-width: 650px;
+}
+
+/* ----------------------------------------------------------
+  Helpers
+---------------------------------------------------------- */
+
+.script-visible {
+    display: block;
+    margin-top: 1em;
+    padding: 0.5em;
+    border: 1px solid #CCC;
+    font-family: monospace;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    color: #333;
+    background-color: #F0F0F0;
+}
+
+/* ----------------------------------------------------------
+  Range
+---------------------------------------------------------- */
+
+.range input {
+    z-index: 1;
+    position: absolute;
+    top: 2em;
+}
+
+.range input.min {
+    left: 0;
+}
+
+.range input.max {
+    right: 0;
+}

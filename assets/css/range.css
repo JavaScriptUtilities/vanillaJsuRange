@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+/* ----------------------------------------------------------
+  Wrapper
+---------------------------------------------------------- */
+
+.range {
+    z-index: 1;
+    position: relative;
+    height: 1em;
+    padding: 0 0.5em;
+    background-color: #CCC;
+}
+
+.range [data-inner] {
+    z-index: 1;
+    position: relative;
+    height: 100%;
+    background-color: #CCC;
+    pointer-events: none;
+}
+
+/* ----------------------------------------------------------
+  Thumb
+---------------------------------------------------------- */
+
+.range [data-thumb] {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1em;
+    height: 1em;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    background-color: #369;
+    transform: translateX(-50%);
+    pointer-events: initial;
+}
+
+.range [data-thumb="2"] {
+    left: 100%;
+    background-color: #36F;
+}
