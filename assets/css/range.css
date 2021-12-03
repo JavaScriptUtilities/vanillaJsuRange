@@ -4,28 +4,42 @@
   Wrapper
 ---------------------------------------------------------- */
 
-.range {
+[data-vanilla-jsu-range] {
     z-index: 1;
     position: relative;
     height: 1em;
     padding: 0 0.5em;
-    background-color: #CCC;
+    background-color: #F0F0F0;
+    pointer-events: none;
 }
 
-.range [data-inner] {
+[data-vanilla-jsu-range] [data-inner] {
     z-index: 1;
     position: relative;
     height: 100%;
+    background-color: #F0F0F0;
+}
+
+/* ----------------------------------------------------------
+  Track
+---------------------------------------------------------- */
+
+[data-vanilla-jsu-range] [data-track] {
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: #CCC;
-    pointer-events: none;
 }
 
 /* ----------------------------------------------------------
   Thumb
 ---------------------------------------------------------- */
 
-.range [data-thumb] {
-    z-index: 1;
+[data-vanilla-jsu-range] [data-thumb] {
+    z-index: 2;
     position: absolute;
     top: 0;
     left: 0;
@@ -40,7 +54,7 @@
     pointer-events: initial;
 }
 
-.range [data-thumb="2"] {
+[data-vanilla-jsu-range] [data-thumb="2"] {
     left: 100%;
     background-color: #36F;
 }

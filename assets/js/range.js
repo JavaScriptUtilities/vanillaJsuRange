@@ -1,6 +1,6 @@
 /*
  * Plugin Name: Vanilla JSU Range
- * Version: 0.1.0
+ * Version: 0.2.0
  * Plugin URL: https://github.com/JavaScriptUtilities/vanillaAnimateWords
  * JavaScriptUtilities Vanilla JSU Range may be freely distributed under the MIT license.
  */
@@ -9,10 +9,15 @@ function vanillaJsuRange($range) {
     var draggedElement,
         innerStart,
         innerWidth,
+        positions = [0, 0],
         $inp = [],
-        $thumb1,
-        $thumb2,
+        $thumbs = [],
+        $track,
         $inner;
+
+    if (!$range) {
+        return false;
+    }
 
     var _opt = {
         round: false,
@@ -23,15 +28,24 @@ function vanillaJsuRange($range) {
 
     function init() {
 
-        $inp = [$range.querySelector('input.min'), $range.querySelector('input.max')];
+        /* Avoid double init */
+        if ($range.getAttribute('data-vanilla-jsu-range') == '1') {
+            return;
+        }
 
+        /* Check inputs */
+        $inp = [$range.querySelector('input.min'), $range.querySelector('input.max')];
         if (!$inp || !$inp[0] || !$inp[1]) {
             return;
         }
 
+        /* Disallow a new init */
+        $range.setAttribute('data-vanilla-jsu-range', 1);
+
         setOptions();
         setUpItems();
         setUpDragNDrop();
+
     }
 
     function setOptions() {
@@ -51,24 +65,30 @@ function vanillaJsuRange($range) {
         /* Setup number values */
         $inp[0].value = _opt.min;
         $inp[1].value = _opt.max;
+
+        /* Store range positions */
+        positions[0] = 0;
+        positions[1] = _opt.max - _opt.min;
     }
 
     function setUpItems() {
 
         /* Build elements */
-        $thumb1 = document.createElement('BUTTON');
-        $thumb2 = document.createElement('BUTTON');
+        $thumbs = [document.createElement('BUTTON'), document.createElement('BUTTON')];
         $inner = document.createElement('DIV');
+        $track = document.createElement('DIV');
 
         /* Add extra attributes */
-        $thumb1.setAttribute('data-thumb', '1');
-        $thumb2.setAttribute('data-thumb', '2');
+        $thumbs[0].setAttribute('data-thumb', '1');
+        $thumbs[1].setAttribute('data-thumb', '2');
+        $track.setAttribute('data-track', '1');
         $inner.setAttribute('data-inner', '1');
 
         /* Insert elements */
+        $inner.appendChild($track);
+        $inner.appendChild($thumbs[0]);
+        $inner.appendChild($thumbs[1]);
         $range.appendChild($inner);
-        $inner.appendChild($thumb1);
-        $inner.appendChild($thumb2);
     }
 
     function setUpDragNDrop() {
@@ -82,6 +102,9 @@ function vanillaJsuRange($range) {
 
     /* Action when dragging starts */
     function mousedown(e) {
+        if (!e.target.getAttribute('data-thumb')) {
+            return;
+        }
         draggedElement = e.target;
         innerStart = $inner.getBoundingClientRect().x;
         innerWidth = $inner.getBoundingClientRect().width;
@@ -97,14 +120,13 @@ function vanillaJsuRange($range) {
             /* Choosing which number is targeted */
             iEl = parseInt(draggedElement.getAttribute('data-thumb'), 10) - 1,
             /* Left position value */
-            left = Math.min(innerWidth, Math.max(0, e.clientX - innerStart)),
+            left = Math.min(innerWidth, Math.max(0, (e.clientX || e.touches[0].clientX) - innerStart)),
             leftPercent = left ? left / innerWidth : 0,
             /* Percent of range */
             rangePercent = rangeLevel * leftPercent;
 
         /* Rounding if necessary */
         if (_opt.round || _opt.step > 1) {
-
             if (_opt.step > 1) {
                 rangePercent = rangePercent / _opt.step;
             }
@@ -114,14 +136,36 @@ function vanillaJsuRange($range) {
             }
         }
 
+        if (iEl == 0) {
+            /* Too high ? */
+            if (rangePercent >= positions[1]) {
+                rangePercent = positions[1] - _opt.step;
+            }
+        }
+        else {
+            if (rangePercent <= positions[0]) {
+                rangePercent = positions[0] + _opt.step;
+            }
+        }
+
+        /* Store position */
+        positions[iEl] = rangePercent;
+
         /* Convert percent to range again */
         leftPercent = rangePercent / rangeLevel * 100;
 
         /* Position thumb */
         draggedElement.style.left = leftPercent + '%';
 
+        /* Position track */
+        if (iEl == 0) {
+            $track.style.left = leftPercent + '%';
+        }
+        $track.style.width = ((positions[1] - positions[0]) / rangeLevel * 100) + '%';
+
         /* Store value */
         $inp[iEl].value = _opt.min + rangePercent;
+
     }
 
     /* Action when dragging stops */

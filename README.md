@@ -4,8 +4,8 @@ Create a range with two thumbs.
 
 ## Roadmap
 
+- [x] Add touch compatibility.
+- [x] Avoid thumb collisions.
+- [x] Display track between thumbs.
 - [ ] How to install.
 - [ ] Minified version.
-- [ ] Add touch compatibility.
-- [ ] Display range between thumbs.
-- [ ] Avoid thumb collisions.

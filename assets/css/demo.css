@@ -32,16 +32,16 @@ body {
   Range
 ---------------------------------------------------------- */
 
-.range input {
+[data-vanilla-jsu-range] input {
     z-index: 1;
     position: absolute;
     top: 2em;
 }
 
-.range input.min {
+[data-vanilla-jsu-range] input.min {
     left: 0;
 }
 
-.range input.max {
+[data-vanilla-jsu-range] input.max {
     right: 0;
 }
