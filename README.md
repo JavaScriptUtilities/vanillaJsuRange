@@ -9,3 +9,4 @@ Create a range with two thumbs.
 - [x] Display track between thumbs.
 - [ ] How to install.
 - [ ] Minified version.
+- [ ] Initial values.
