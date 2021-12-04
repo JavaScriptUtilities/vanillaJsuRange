@@ -1,6 +1,6 @@
 /*
  * Plugin Name: Vanilla JSU Range
- * Version: 0.2.0
+ * Version: 0.3.0
  * Plugin URL: https://github.com/JavaScriptUtilities/vanillaAnimateWords
  * JavaScriptUtilities Vanilla JSU Range may be freely distributed under the MIT license.
  */
@@ -10,6 +10,7 @@ function vanillaJsuRange($range) {
         innerStart,
         innerWidth,
         positions = [0, 0],
+        rangeLevel,
         $inp = [],
         $thumbs = [],
         $track,
@@ -45,6 +46,7 @@ function vanillaJsuRange($range) {
         setOptions();
         setUpItems();
         setUpDragNDrop();
+        setUpInitialValues();
 
     }
 
@@ -61,14 +63,7 @@ function vanillaJsuRange($range) {
         if ($range.getAttribute('data-round') && $range.getAttribute('data-round')) {
             _opt.round = true;
         }
-
-        /* Setup number values */
-        $inp[0].value = _opt.min;
-        $inp[1].value = _opt.max;
-
-        /* Store range positions */
-        positions[0] = 0;
-        positions[1] = _opt.max - _opt.min;
+        rangeLevel = _opt.max - _opt.min;
     }
 
     function setUpItems() {
@@ -91,11 +86,37 @@ function vanillaJsuRange($range) {
         $range.appendChild($inner);
     }
 
+    function setUpInitialValues() {
+
+        /* Store initial values */
+        var _values = [$inp[0].value, $inp[1].value];
+
+        /* Store range positions */
+        positions[0] = 0;
+        positions[1] = rangeLevel;
+
+        /* Setup basic input values */
+        $inp[0].value = _opt.min;
+        $inp[1].value = _opt.max;
+
+        /* If initial values exists : position thumb & setup values */
+        for (var i = 0; i <= 1; i++) {
+            if (_values[i] && _values[i] != $inp[i].value) {
+                setCursor(i, (parseInt(_values[i], 10) - _opt.min) / rangeLevel);
+            }
+        }
+
+    }
+
+    /* ----------------------------------------------------------
+      Events
+    ---------------------------------------------------------- */
+
     function setUpDragNDrop() {
-        $inner.addEventListener('touchstart', mousedown)
+        $inner.addEventListener('touchstart', mousedown);
         document.addEventListener('touchmove', mousemove);
-        document.addEventListener('touchend', mouseup)
-        $inner.addEventListener('mousedown', mousedown)
+        document.addEventListener('touchend', mouseup);
+        $inner.addEventListener('mousedown', mousedown);
         document.addEventListener('mousemove', mousemove);
         document.addEventListener('mouseup', mouseup);
     }
@@ -115,15 +136,27 @@ function vanillaJsuRange($range) {
         if (!draggedElement) {
             return;
         }
-        var rangePercent = 0,
-            rangeLevel = _opt.max - _opt.min,
+        var
             /* Choosing which number is targeted */
             iEl = parseInt(draggedElement.getAttribute('data-thumb'), 10) - 1,
             /* Left position value */
             left = Math.min(innerWidth, Math.max(0, (e.clientX || e.touches[0].clientX) - innerStart)),
-            leftPercent = left ? left / innerWidth : 0,
-            /* Percent of range */
-            rangePercent = rangeLevel * leftPercent;
+            leftPercent = left ? left / innerWidth : 0;
+
+        setCursor(iEl, leftPercent);
+    }
+
+    /* Action when dragging stops */
+    function mouseup() {
+        draggedElement = false;
+    }
+
+    /* ----------------------------------------------------------
+      Define range
+    ---------------------------------------------------------- */
+
+    function setCursor(iEl, leftPercent) {
+        var rangePercent = rangeLevel * leftPercent;
 
         /* Rounding if necessary */
         if (_opt.round || _opt.step > 1) {
@@ -155,7 +188,7 @@ function vanillaJsuRange($range) {
         leftPercent = rangePercent / rangeLevel * 100;
 
         /* Position thumb */
-        draggedElement.style.left = leftPercent + '%';
+        $thumbs[iEl].style.left = leftPercent + '%';
 
         /* Position track */
         if (iEl == 0) {
@@ -166,11 +199,6 @@ function vanillaJsuRange($range) {
         /* Store value */
         $inp[iEl].value = _opt.min + rangePercent;
 
-    }
-
-    /* Action when dragging stops */
-    function mouseup() {
-        draggedElement = false;
     }
 
     init();

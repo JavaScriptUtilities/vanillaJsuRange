@@ -7,6 +7,7 @@ Create a range with two thumbs.
 - [x] Add touch compatibility.
 - [x] Avoid thumb collisions.
 - [x] Display track between thumbs.
+- [x] Minified version.
+- [x] Initial values.
 - [ ] How to install.
-- [ ] Minified version.
-- [ ] Initial values.
+- [ ] Refresh from input values.
