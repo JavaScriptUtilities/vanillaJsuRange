@@ -1,6 +1,6 @@
 {
   "name": "vanillaJsuRange",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Create a range with two thumbs",
   "main": "assets/js/range.js",
   "scripts": {},

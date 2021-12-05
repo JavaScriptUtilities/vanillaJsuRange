@@ -2,6 +2,18 @@
 
 Create a range with two thumbs.
 
+## Install
+
+First, load `assets/js/range.js` and `assets/css/range.css` in your webpage.
+
+Then, when DOM is ready, start the plugin :
+
+```js
+document.querySelectorAll(".range").forEach(function($item) {
+    new vanillaJsuRange($item);
+});
+```
+
 ## Roadmap
 
 - [x] Add touch compatibility.
@@ -9,5 +21,6 @@ Create a range with two thumbs.
 - [x] Display track between thumbs.
 - [x] Minified version.
 - [x] Initial values.
-- [ ] How to install.
-- [ ] Refresh from input values.
+- [x] Refresh from input values.
+- [x] How to install.
+- [ ] Fix when manually changing an input to its minimal or maximal values.

@@ -1,12 +1,13 @@
 /*
  * Plugin Name: Vanilla JSU Range
- * Version: 0.3.0
+ * Version: 1.0.0
  * Plugin URL: https://github.com/JavaScriptUtilities/vanillaAnimateWords
  * JavaScriptUtilities Vanilla JSU Range may be freely distributed under the MIT license.
  */
 
 function vanillaJsuRange($range) {
-    var draggedElement,
+    'use strict';
+    var draggedElement = false,
         innerStart,
         innerWidth,
         positions = [0, 0],
@@ -23,7 +24,7 @@ function vanillaJsuRange($range) {
     var _opt = {
         round: false,
         step: 1,
-        min: 10,
+        min: 1,
         max: 100,
     };
 
@@ -35,7 +36,7 @@ function vanillaJsuRange($range) {
         }
 
         /* Check inputs */
-        $inp = [$range.querySelector('input.min'), $range.querySelector('input.max')];
+        $inp = [$range.querySelector('input[data-range-type="min"]'), $range.querySelector('input[data-range-type="max"]')];
         if (!$inp || !$inp[0] || !$inp[1]) {
             return;
         }
@@ -46,8 +47,8 @@ function vanillaJsuRange($range) {
         setOptions();
         setUpItems();
         setUpDragNDrop();
-        setUpInitialValues();
-
+        setUpRefresh();
+        setUpValues();
     }
 
     function setOptions() {
@@ -84,9 +85,19 @@ function vanillaJsuRange($range) {
         $inner.appendChild($thumbs[0]);
         $inner.appendChild($thumbs[1]);
         $range.appendChild($inner);
+
+        /* Force settings on number inputs */
+        for (var i = 0; i <= 1; i++) {
+            $inp[i].setAttribute('step', _opt.step);
+            $inp[i].setAttribute('min', _opt.min);
+            $inp[i].setAttribute('max', _opt.max);
+        }
     }
 
-    function setUpInitialValues() {
+    function setUpValues() {
+        if (draggedElement) {
+            return;
+        }
 
         /* Store initial values */
         var _values = [$inp[0].value, $inp[1].value];
@@ -109,7 +120,23 @@ function vanillaJsuRange($range) {
     }
 
     /* ----------------------------------------------------------
-      Events
+      Refresh events
+    ---------------------------------------------------------- */
+
+    function setUpRefresh() {
+        $range.addEventListener('vanilla-jsu-range-refresh', function() {
+            setUpValues();
+        });
+
+        /* $inp - i */
+        for (var i = 0, len = $inp.length; i < len; i++) {
+            $inp[i].addEventListener('change', setUpValues);
+        }
+
+    }
+
+    /* ----------------------------------------------------------
+      Dragndrop
     ---------------------------------------------------------- */
 
     function setUpDragNDrop() {
@@ -169,7 +196,7 @@ function vanillaJsuRange($range) {
             }
         }
 
-        if (iEl == 0) {
+        if (iEl === 0) {
             /* Too high ? */
             if (rangePercent >= positions[1]) {
                 rangePercent = positions[1] - _opt.step;
@@ -191,7 +218,7 @@ function vanillaJsuRange($range) {
         $thumbs[iEl].style.left = leftPercent + '%';
 
         /* Position track */
-        if (iEl == 0) {
+        if (iEl === 0) {
             $track.style.left = leftPercent + '%';
         }
         $track.style.width = ((positions[1] - positions[0]) / rangeLevel * 100) + '%';

@@ -20,6 +20,7 @@ body {
     margin-top: 1em;
     padding: 0.5em;
     border: 1px solid #CCC;
+    overflow: auto;
     font-family: monospace;
     white-space: pre-wrap;
     white-space: -moz-pre-wrap;
@@ -32,16 +33,20 @@ body {
   Range
 ---------------------------------------------------------- */
 
-[data-vanilla-jsu-range] input {
+body [data-vanilla-jsu-range] {
+    margin-bottom: 40px;
+}
+
+body [data-vanilla-jsu-range] input[data-range-type] {
     z-index: 1;
     position: absolute;
     top: 2em;
 }
 
-[data-vanilla-jsu-range] input.min {
+[data-vanilla-jsu-range] [data-range-type="min"] {
     left: 0;
 }
 
-[data-vanilla-jsu-range] input.max {
+[data-vanilla-jsu-range] [data-range-type="max"] {
     right: 0;
 }

@@ -10,10 +10,14 @@
     </head>
     <body>
         <h1>Double Range</h1>
+        <p>Create a range with two thumbs.</p>
         <div class="range" data-min="25000" data-max="75000" data-round="1" data-step="1000">
-            <input type="number" class="min" name="min" value="30000" readonly />
-            <input type="number" class="max" name="max" value="70000" readonly />
+            <input type="number" data-range-type="min" name="min" value="30000" />
+            <input type="number" data-range-type="max" name="max" value="70000" />
         </div>
-        <script>document.querySelectorAll('.range').forEach(vanillaJsuRange);</script>
+        <script class="script-visible">
+document.querySelectorAll(".range").forEach(function($item) {
+    new vanillaJsuRange($item);
+});</script>
     </body>
 </html>
