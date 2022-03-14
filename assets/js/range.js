@@ -1,6 +1,6 @@
 /*
  * Plugin Name: Vanilla JSU Range
- * Version: 1.1.0
+ * Version: 1.1.1
  * Plugin URL: https://github.com/JavaScriptUtilities/vanillaAnimateWords
  * JavaScriptUtilities Vanilla JSU Range may be freely distributed under the MIT license.
  */
@@ -174,8 +174,10 @@ function vanillaJsuRange($range) {
 
     /* Action when dragging stops */
     function mouseup() {
+        if (draggedElement) {
+            trigger_success_event();
+        }
         draggedElement = false;
-        trigger_success_event();
     }
 
     function trigger_success_event() {
