@@ -1,6 +1,6 @@
 /*
  * Plugin Name: Vanilla JSU Range
- * Version: 1.0.0
+ * Version: 1.1.0
  * Plugin URL: https://github.com/JavaScriptUtilities/vanillaAnimateWords
  * JavaScriptUtilities Vanilla JSU Range may be freely distributed under the MIT license.
  */
@@ -94,10 +94,11 @@ function vanillaJsuRange($range) {
         }
     }
 
-    function setUpValues() {
+    function setUpValues(_forceReset) {
         if (draggedElement) {
             return;
         }
+        _forceReset = _forceReset ? _forceReset : false;
 
         /* Store initial values */
         var _values = [$inp[0].value, $inp[1].value];
@@ -112,11 +113,10 @@ function vanillaJsuRange($range) {
 
         /* If initial values exists : position thumb & setup values */
         for (var i = 0; i <= 1; i++) {
-            if (_values[i] && _values[i] != $inp[i].value) {
+            if (_values[i] && (_values[i] != $inp[i].value || _forceReset)) {
                 setCursor(i, (parseInt(_values[i], 10) - _opt.min) / rangeLevel);
             }
         }
-
     }
 
     /* ----------------------------------------------------------
@@ -125,10 +125,9 @@ function vanillaJsuRange($range) {
 
     function setUpRefresh() {
         $range.addEventListener('vanilla-jsu-range-refresh', function() {
-            setUpValues();
+            setUpValues(true);
         });
 
-        /* $inp - i */
         for (var i = 0, len = $inp.length; i < len; i++) {
             $inp[i].addEventListener('change', setUpValues);
         }
@@ -176,6 +175,16 @@ function vanillaJsuRange($range) {
     /* Action when dragging stops */
     function mouseup() {
         draggedElement = false;
+        trigger_success_event();
+    }
+
+    function trigger_success_event() {
+        var e = new Event("vanilla-jsu-range-success");
+        e.vanillajsurange = {
+            min: parseInt($inp[0].value, 10),
+            max: parseInt($inp[1].value, 10)
+        };
+        $range.dispatchEvent(e);
     }
 
     /* ----------------------------------------------------------
@@ -225,7 +234,6 @@ function vanillaJsuRange($range) {
 
         /* Store value */
         $inp[iEl].value = _opt.min + rangePercent;
-
     }
 
     init();
