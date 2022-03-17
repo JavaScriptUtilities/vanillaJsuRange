@@ -1,6 +1,6 @@
 /*
  * Plugin Name: Vanilla JSU Range
- * Version: 1.1.1
+ * Version: 1.1.2
  * Plugin URL: https://github.com/JavaScriptUtilities/vanillaAnimateWords
  * JavaScriptUtilities Vanilla JSU Range may be freely distributed under the MIT license.
  */
@@ -76,7 +76,9 @@ function vanillaJsuRange($range) {
 
         /* Add extra attributes */
         $thumbs[0].setAttribute('data-thumb', '1');
+        $thumbs[0].setAttribute('type', 'button');
         $thumbs[1].setAttribute('data-thumb', '2');
+        $thumbs[1].setAttribute('type', 'button');
         $track.setAttribute('data-track', '1');
         $inner.setAttribute('data-inner', '1');
 
