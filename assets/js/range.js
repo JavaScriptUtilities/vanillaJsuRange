@@ -1,6 +1,6 @@
 /*
  * Plugin Name: Vanilla JSU Range
- * Version: 1.1.2
+ * Version: 1.1.3
  * Plugin URL: https://github.com/JavaScriptUtilities/vanillaAnimateWords
  * JavaScriptUtilities Vanilla JSU Range may be freely distributed under the MIT license.
  */

@@ -49,4 +49,5 @@ body [data-vanilla-jsu-range] input[data-range-type] {
 
 [data-vanilla-jsu-range] [data-range-type="max"] {
     right: 0;
+    text-align: right;
 }
